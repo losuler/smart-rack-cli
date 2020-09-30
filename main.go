@@ -211,9 +211,16 @@ func pickDevice(devices []Device, alreadyBooked bool) (device Device, skip bool)
     if alreadyBooked {
         // Use first device as they all have the same name
         kitDevice := strings.Split(devices[0].Name, " ")
+
         // This prints the same as Kit.Name
-        fmt.Printf("Name: %s %s %s %s %s %s\n", kitDevice[0], kitDevice[1], kitDevice[2],
-                                                kitDevice[3], kitDevice[4], kitDevice[5])
+        // TODO: Can this be done better?
+        if len(kitDevice) == 8 {
+            fmt.Printf("Name: %s %s %s %s %s %s\n", kitDevice[0], kitDevice[1], kitDevice[2],
+                                                    kitDevice[3], kitDevice[4], kitDevice[5])
+        } else if len(kitDevice) == 7 {
+            fmt.Printf("Name: %s %s %s %s %s\n", kitDevice[0], kitDevice[1], kitDevice[2],
+                                                    kitDevice[3], kitDevice[4])
+        }
     }
 
     table := tabby.New()
