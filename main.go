@@ -17,6 +17,7 @@ import (
     "runtime"
     "golang.org/x/crypto/ssh/terminal"
     "github.com/gocolly/colly"
+    "github.com/briandowns/spinner"
 )
 
 const (
@@ -247,7 +248,6 @@ func powerOnDevice(c *colly.Collector, login Login, device Device) error {
         return err
     }
 
-    fmt.Println(device.Name)
     time.Sleep(5 * time.Second)
 
     return nil
@@ -462,7 +462,13 @@ func main() {
     login.Username = readInput("Student ID: ")
     login.Password = readPass("Password: ")
 
+    spin := spinner.New(spinner.CharSets[14], 100*time.Millisecond)
+    spin.Suffix = " Logging in..."
+    spin.Start()
+
     client = getSession(client, login)
+
+    spin.Suffix = " Getting kits..."
 
     kits, err := getKits(client, login)
     if err != nil {
@@ -475,6 +481,9 @@ func main() {
             log.Fatalln(err)
         }
 
+        spin.FinalMSG = "✔ Getting kits complete.\n"
+        spin.Stop()
+
         fmt.Printf("Name: %s\nType: %s\n", freeKit.Name, freeKit.Type)
 
         resp := readInput("Would you like to continue with booking this kit? (y/n) ")
@@ -484,11 +493,18 @@ func main() {
 
             login.BookedDuration = readInputDuration()
 
+            spin.Suffix = " Booking kit..."
+            spin.Start()
+
             req := getKit(client, login)
             bookKit(client, login, req)
+
+            spin.Suffix = " Getting devices..."
         } else {
             os.Exit(0)
         }
+    } else {
+        spin.Suffix = " Getting devices..."
     }
 
     // Once booked, capture Ctrl+C and print exit message
@@ -502,14 +518,27 @@ func main() {
 
     devices, err := getDevices(client, login)
     if err != nil {
+        spin.FinalMSG = "✔ Getting devices complete.\n"
+        spin.Stop()
         exitMsg(login)
         log.Fatalln(err)
     }
 
+    spin.FinalMSG = "✔ Getting devices complete.\n"
+    spin.Stop()
+
     pickedDevice, skip := pickDevice(devices)
 
     if !skip {
+        spin.Suffix = " Powering on device..."
+        spin.Start()
+
         powerOnDevice(client, login, pickedDevice)
+
+        spin.FinalMSG = "✔ Powering on device complete.\n"
+        spin.Stop()
+
+        fmt.Println(pickedDevice.Name)
 
         if err := runSSH(pickedDevice); err != nil {
             tries := 0
@@ -532,6 +561,9 @@ func main() {
     resp := readInput("Do you want to shutdown and release all devices now? (y/n) ")
 
     if resp == "y" {
+        spin.Suffix = " Powering off devices..."
+        spin.Start()
+
         // Get latest device status
         devices, err = getDevices(client, login)
         if err != nil {
@@ -547,11 +579,16 @@ func main() {
 
         bookedDevices := getBookedDevices(client, login)
 
+        spin.Suffix = " Releasing devices..."
+
         err = releaseDevices(client, login, bookedDevices)
         if err != nil {
             exitMsg(login)
             log.Fatalln("Unable to release devices.")
         }
+
+        spin.FinalMSG = "✔ Releasing devices complete.\n"
+        spin.Stop()
     } else {
         log.Println("User aborted.")
         exitMsg(login)
