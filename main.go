@@ -325,7 +325,8 @@ func readInput(msg string) string {
         tries += 1
         if input != "" {
             return input
-        } else if tries > 3 { 
+        } else if tries > 3 {
+            // TODO: Fix doesn't print exitMsg()
             log.Fatalln("No input was provided.") 
         }
 
