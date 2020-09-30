@@ -17,7 +17,6 @@ import (
     "runtime"
     "golang.org/x/crypto/ssh/terminal"
     "github.com/gocolly/colly"
-    "golang.org/x/crypto/ssh"
 )
 
 const (
@@ -391,60 +390,6 @@ func readInputRoom() string {
             log.Fatalln("Correct room name was not provided.")
         }
     }
-}
-
-func clientSSH(device Device) error {
-    config := &ssh.ClientConfig{
-		User: device.Username,
-		Auth: []ssh.AuthMethod{
-			ssh.Password(device.Password),
-		},
-		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-	}
-
-    host := fmt.Sprintf("%s:22", device.Domain)
-    
-	conn, err := ssh.Dial("tcp", host, config)
-	if err != nil {
-		log.Fatalln("Unable to connect:",err)
-	}
-	defer conn.Close()
-
-	session, err := conn.NewSession()
-	if err != nil {
-		log.Fatalln("Unable to create session:", err)
-	}
-	defer session.Close()
-
-	session.Stdout = os.Stdout
-	session.Stderr = os.Stderr
-    session.Stdin = os.Stdin
-
-    // TODO: Capture Ctrl+C to exit session
-    
-    modes := ssh.TerminalModes{
-		ssh.ECHO:          0,
-		ssh.TTY_OP_ISPEED: 14400,
-		ssh.TTY_OP_OSPEED: 14400,
-	}
-
-	fd := int(os.Stdin.Fd())
-    width, height, err := terminal.GetSize(fd)
-    if err != nil {
-        session.RequestPty("xterm", 25, 100, modes)
-    } else {
-        session.RequestPty("xterm", height, width, modes)
-    }
-
-	if err := session.Shell(); err != nil {
-        log.Fatalln("Unable to start shell:", err)
-    }
-
-	if err := session.Wait(); err != nil {
-		log.Fatalln(err)
-	}
-
-	return nil
 }
 
 func runSSH(device Device) error {
