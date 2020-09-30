@@ -18,6 +18,7 @@ import (
     "golang.org/x/crypto/ssh/terminal"
     "github.com/gocolly/colly"
     "github.com/briandowns/spinner"
+    "github.com/cheynewallace/tabby"
 )
 
 const (
@@ -205,11 +206,28 @@ func getDevices(c *colly.Collector, login Login) ([]Device, error) {
     return devices, nil
 }
 
-func pickDevice(devices []Device) (device Device, skip bool) {
-    for i, d := range devices {
-        fmt.Printf("%d: %s (%s) %s %s %s\n",
-                   i + 1, d.Name, d.Model, d.VANPort, d.Power, d.Network)
+func pickDevice(devices []Device, alreadyBooked bool) (device Device, skip bool) {
+    // The kit name gets printed on first booking
+    if alreadyBooked {
+        // Use first device as they all have the same name
+        kitDevice := strings.Split(devices[0].Name, " ")
+        // This prints the same as Kit.Name
+        fmt.Printf("Name: %s %s %s %s %s %s\n", kitDevice[0], kitDevice[1], kitDevice[2],
+                                                kitDevice[3], kitDevice[4], kitDevice[5])
     }
+
+    table := tabby.New()
+    for i, d := range devices {
+        // Number to string
+        num := strconv.Itoa(i + 1)
+
+        // Print only the device type (router/switch) and number
+        kitDevice := strings.Split(d.Name, " ")
+        deviceName := fmt.Sprintf("%s %s", kitDevice[6], kitDevice[7])
+
+        table.AddLine(num + ": " + deviceName, d.Model, d.VANPort, d.Power, d.Network)
+    }
+    table.Print()
 
     tries := 1
     for {
@@ -476,7 +494,10 @@ func main() {
         log.Fatalln(err)
     }
 
-    if !alreadyBooked(login.Username, kits) {
+    // True if a kit is actively booked
+    alreadyBooked := alreadyBooked(login.Username, kits)
+
+    if !alreadyBooked {
         freeKit, err := pickKit(kits)
         if err != nil {
             log.Fatalln(err)
@@ -528,7 +549,7 @@ func main() {
     spin.FinalMSG = "✔ Getting devices complete.\n"
     spin.Stop()
 
-    pickedDevice, skip := pickDevice(devices)
+    pickedDevice, skip := pickDevice(devices, alreadyBooked)
 
     if !skip {
         spin.Suffix = " Powering on device..."
