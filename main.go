@@ -464,7 +464,7 @@ func alreadyBooked(user string, kits []Kit) bool {
 }
 
 func exitMsg(login Login) {
-    fmt.Println("\nPlease shutdown and release the devices manually.")
+    fmt.Println("Please shutdown and release the devices manually.")
     fmt.Println(login.RoomURL)
 }
 
@@ -589,12 +589,14 @@ func main() {
         // Get latest device status
         devices, err = getDevices(client, login)
         if err != nil {
+            spin.Stop()
             exitMsg(login)
             log.Fatalln(err)
         }
 
         err := powerOffDevices(client, login, devices)
         if err != nil {
+            spin.Stop()
             exitMsg(login)
             log.Fatalln("Unable to poweroff devices.")
         }
@@ -605,6 +607,7 @@ func main() {
 
         err = releaseDevices(client, login, bookedDevices)
         if err != nil {
+            spin.Stop()
             exitMsg(login)
             log.Fatalln("Unable to release devices.")
         }
