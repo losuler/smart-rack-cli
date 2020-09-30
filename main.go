@@ -204,14 +204,16 @@ func getDevices(c *colly.Collector, login Login) ([]Device, error) {
     return devices, nil
 }
 
-func pickDevice(devices []Device) Device {
+func pickDevice(devices []Device) (device Device, skip bool) {
     for i, d := range devices {
-        fmt.Printf("%d: %s (%s) %s %s %s\n", i + 1, d.Name, d.Model, d.VANPort, d.Power, d.Network)
+        fmt.Printf("%d: %s (%s) %s %s %s\n",
+                   i + 1, d.Name, d.Model, d.VANPort, d.Power, d.Network)
     }
 
     tries := 1
     for {
-        msg := fmt.Sprintf("Choose a device to connect to from 1-%d: ", len(devices))
+        msg := fmt.Sprintf("Choose a device to connect to from 1-%d (0 will skip): ",
+                           len(devices))
         resp := readInput(msg)
 
         // Needs to be int to compare to len()
@@ -220,7 +222,11 @@ func pickDevice(devices []Device) Device {
         respNum -= 1
 
         if respNum <= len(devices) && respNum >= 1 {
-            return devices[respNum]
+            skip = false
+            return devices[respNum], skip
+        } else if respNum < 1 {
+            skip = true
+            return devices[0], skip
         } else if tries > 3 {
             log.Fatalln("A device in the range was not chosen.") 
         }
@@ -500,22 +506,25 @@ func main() {
         log.Fatalln(err)
     }
 
-    pickedDevice := pickDevice(devices)
-    powerOnDevice(client, login, pickedDevice)
+    pickedDevice, skip := pickDevice(devices)
 
-    if err := runSSH(pickedDevice); err != nil {
-        tries := 0
-        for {
-            resp := readInput("The session appears to have disconnected. Retry? (y/n) ")
+    if !skip {
+        powerOnDevice(client, login, pickedDevice)
 
-            if resp == "y" {
-                runSSH(pickedDevice)
-                tries += 1
-            } else if resp == "n" {
-                break
-            } else if tries > 3 {
-                log.Println("Retries exceeded.")
-                break
+        if err := runSSH(pickedDevice); err != nil {
+            tries := 0
+            for {
+                resp := readInput("The session appears to have disconnected. Retry? (y/n) ")
+
+                if resp == "y" {
+                    runSSH(pickedDevice)
+                    tries += 1
+                } else if resp == "n" {
+                    break
+                } else if tries > 3 {
+                    log.Println("Retries exceeded.")
+                    break
+                }
             }
         }
     }
