@@ -426,6 +426,18 @@ func runSSH(device Device) error {
     return nil
 }
 
+func alreadyBooked(user string, kits []Kit) bool {
+    // Kit selection appends an "s" to student IDs
+    user = "s" + user
+
+    for _, kit := range kits {
+        if kit.CurrentUser == user {
+            return true
+        }
+    }
+    return false
+}
+
 func exitMsg(login Login) {
     fmt.Println("Please shutdown and release the devices manually.")
     fmt.Println(login.RoomURL)
@@ -451,24 +463,26 @@ func main() {
         log.Fatalln(err)
     }
 
-    freeKit, err := pickKit(kits)
-    if err != nil {
-        log.Fatalln(err)
-    }
+    if !alreadyBooked(login.Username, kits) {
+        freeKit, err := pickKit(kits)
+        if err != nil {
+            log.Fatalln(err)
+        }
 
-    fmt.Printf("Name: %s\nType: %s\n", freeKit.Name, freeKit.Type)
+        fmt.Printf("Name: %s\nType: %s\n", freeKit.Name, freeKit.Type)
 
-    resp := readInput("Would you like to continue with booking this kit? (y/n) ")
+        resp := readInput("Would you like to continue with booking this kit? (y/n) ")
 
-    if strings.ToLower(resp) == "y" {
-        login.BookedKit = freeKit
+        if strings.ToLower(resp) == "y" {
+            login.BookedKit = freeKit
 
-        login.BookedDuration = readInputDuration()
-        
-        req := getKit(client, login)
-        bookKit(client, login, req)
-    } else {
-        os.Exit(0)
+            login.BookedDuration = readInputDuration()
+
+            req := getKit(client, login)
+            bookKit(client, login, req)
+        } else {
+            os.Exit(0)
+        }
     }
 
     // Once booked, capture Ctrl+C and print exit message
@@ -492,7 +506,7 @@ func main() {
     if err := runSSH(pickedDevice); err != nil {
         tries := 0
         for {
-            resp = readInput("The session appears to have disconnected. Retry? (y/n) ")
+            resp := readInput("The session appears to have disconnected. Retry? (y/n) ")
 
             if resp == "y" {
                 runSSH(pickedDevice)
@@ -506,7 +520,7 @@ func main() {
         }
     }
 
-    resp = readInput("Do you want to shutdown and release all devices now? (y/n) ")
+    resp := readInput("Do you want to shutdown and release all devices now? (y/n) ")
 
     if resp == "y" {
         // Get latest device status
