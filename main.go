@@ -439,7 +439,7 @@ func alreadyBooked(user string, kits []Kit) bool {
 }
 
 func exitMsg(login Login) {
-    fmt.Println("Please shutdown and release the devices manually.")
+    fmt.Println("\nPlease shutdown and release the devices manually.")
     fmt.Println(login.RoomURL)
 }
 
