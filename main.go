@@ -18,7 +18,6 @@ import (
     "golang.org/x/crypto/ssh/terminal"
     "github.com/gocolly/colly"
     "golang.org/x/crypto/ssh"
-    "github.com/gocolly/colly/debug"
 )
 
 const (
@@ -148,10 +147,6 @@ func getKit(c *colly.Collector, login Login) map[string]string {
             data[e.Attr("name")] = "true"
         })
 
-        for id, value := range data {
-            log.Println(id + " " + value)
-        }
-
         req = data
     })
     
@@ -195,8 +190,6 @@ func getDevices(c *colly.Collector, login Login) ([]Device, error) {
             device.Username = sshRegexGroups[1]
             device.Password = sshRegexGroups[2]
             device.Domain = sshRegexGroups[3]
-
-            log.Println(device.Power)
 
             devices = append(devices, device)
         })
@@ -268,10 +261,6 @@ func getBookedDevices(c *colly.Collector, login Login) map[string]string {
             data[e.Attr("name")] = "true"
         })
 
-        for id, value := range data {
-            log.Println(id + " " + value)
-        }
-
         req = data
     })
     
@@ -293,10 +282,6 @@ func powerOffDevices(c *colly.Collector, login Login, devices []Device) error {
             data[device.Number] = "true"
             poweredOn += 1
         }  
-    }
-
-    for id, value := range data {
-        log.Println(id + " " + value)
     }
     
     if poweredOn != 0 {
@@ -506,7 +491,6 @@ func main() {
 
     log.SetFlags(0)
     client := colly.NewCollector(
-        colly.Debugger(&debug.LogDebugger{}),
         colly.AllowURLRevisit(),
     )
 
