@@ -1,5 +1,5 @@
 NAME=srs
-VERSION=$(shell git describe --abbrev=0 --tags)
+VERSION=$(shell git describe --abbrev=0 --tags | cut -c2-)
 TAR=tar --create --verbose --file
 
 build:
