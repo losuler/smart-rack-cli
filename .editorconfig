@@ -1,0 +1,8 @@
+root = true
+
+[*.go]
+indent_style = space
+ident_size = 4
+
+[Makefile]
+indent_style = tab
