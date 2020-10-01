@@ -16,7 +16,7 @@ import (
     "time"
     "runtime"
     "golang.org/x/crypto/ssh/terminal"
-    "github.com/gocolly/colly"
+    "github.com/gocolly/colly/v2"
     "github.com/briandowns/spinner"
     "github.com/cheynewallace/tabby"
 )
