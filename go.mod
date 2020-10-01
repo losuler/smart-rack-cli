@@ -1,5 +1,4 @@
-module gitlab.com/losuler/smart-rack-ssh
-
+module gitlab.com/losuler/smart-rack-cli
 go 1.14
 
 require (
