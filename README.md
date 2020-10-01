@@ -7,7 +7,7 @@
     </p>
   </p>
 </p>
-<img src="preview.gif"/>
+<img src="img/preview.gif"/>
 </div>
 <br>
 
@@ -18,7 +18,6 @@
 On Linux and macOS systems `sshpass` is required to be installed.
 
 On Windows systems `putty` is required to be installed.
-
 
 ## Usage
 
