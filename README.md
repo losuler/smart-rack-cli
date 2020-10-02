@@ -29,7 +29,9 @@ I recommend the official [Windows Terminal](https://github.com/microsoft/termina
 
 ## Usage
 
-Run by extracting and executing the binary named `srs` from the [latest release](https://github.com/losuler/smart-rack-cli/releases/latest) archive for your system. For each router or switch you would like to connect to, start a seperate process.
+Run by extracting and executing the binary named `srs` from the [latest release](https://github.com/losuler/smart-rack-cli/releases/latest) archive for your system.
+
+A kit will be randomly selected from those not in use. For each router or switch you would like to connect to, start a seperate process.
 
 **Note:** Answering `y` to the prompt to shutdown and release will effect ALL routers and switches booked.
 
