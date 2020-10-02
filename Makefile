@@ -14,6 +14,7 @@ build-all:
 	GOOS=windows GOARCH=amd64 go build -v -o build/windows-amd64/$(NAME) main.go
 
 release-all:
+	mkdir release
 	$(TAR) release/$(NAME)-$(VERSION)-linux-amd64.tar.gz build/linux-amd64/$(NAME)
 	$(TAR) release/$(NAME)-$(VERSION)-macos-amd64.tar.gz build/macos-amd64/$(NAME)
 	$(TAR) release/$(NAME)-$(VERSION)-windows-amd64.tar.gz build/windows-amd64/$(NAME)
