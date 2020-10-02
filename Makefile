@@ -1,6 +1,7 @@
 NAME=srs
 VERSION=$(shell git describe --abbrev=0 --tags | cut -c2-)
-TAR=tar --gzip --create --verbose --file
+TAR=tar --gzip --create --verbose
+EXTRA_FILES=README.md LICENSE.txt
 
 build:
 	go build -o bin/$(NAME) main.go
@@ -14,10 +15,16 @@ build-all:
 	GOOS=windows GOARCH=amd64 go build -v -o build/windows-amd64/$(NAME) main.go
 
 release-all:
-	mkdir -p release
-	$(TAR) release/$(NAME)-$(VERSION)-linux-amd64.tar.gz build/linux-amd64/$(NAME)
-	$(TAR) release/$(NAME)-$(VERSION)-macos-amd64.tar.gz build/macos-amd64/$(NAME)
-	zip -r release/$(NAME)-$(VERSION)-windows-amd64.zip build/windows-amd64/$(NAME)
+	cp $(EXTRA_FILES) build/linux-amd64/
+	cp $(EXTRA_FILES) build/macos-amd64/
+	cp $(EXTRA_FILES) build/windows-amd64/
+	mkdir --parents release
+	$(TAR) --directory build/linux-amd64 --file \
+		release/$(NAME)-$(VERSION)-linux-amd64.tar.gz .
+	$(TAR) --directory build/macos-amd64 --file \
+		release/$(NAME)-$(VERSION)-macos-amd64.tar.gz .
+	cd build/windows-amd64 && \
+		zip ../../release/$(NAME)-$(VERSION)-windows-amd64.zip *
 
 clean:
 	rm --recursive build/linux-amd64/* build/macos-amd64/* build/windows-amd64/*
