@@ -17,7 +17,7 @@ release-all:
 	mkdir release
 	$(TAR) release/$(NAME)-$(VERSION)-linux-amd64.tar.gz build/linux-amd64/$(NAME)
 	$(TAR) release/$(NAME)-$(VERSION)-macos-amd64.tar.gz build/macos-amd64/$(NAME)
-	$(TAR) release/$(NAME)-$(VERSION)-windows-amd64.tar.gz build/windows-amd64/$(NAME)
+	zip -r release/$(NAME)-$(VERSION)-windows-amd64.zip build/windows-amd64/$(NAME)
 
 clean:
 	rm --recursive build/linux-amd64/* build/macos-amd64/* build/windows-amd64/*
