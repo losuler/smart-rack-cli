@@ -1,6 +1,6 @@
 NAME=srs
 VERSION=$(shell git describe --abbrev=0 --tags | cut -c2-)
-TAR=tar --create --verbose --file
+TAR=tar --gzip --create --verbose --file
 
 build:
 	go build -o bin/$(NAME) main.go
