@@ -12,7 +12,7 @@ run:
 build-all:
 	GOOS=linux GOOARCH=amd64 go build -v -o build/linux-amd64/$(NAME) main.go
 	GOOS=darwin GOARCH=amd64 go build -v -o build/macos-amd64/$(NAME) main.go
-	GOOS=windows GOARCH=amd64 go build -v -o build/windows-amd64/$(NAME) main.go
+	GOOS=windows GOARCH=amd64 go build -v -o build/windows-amd64/$(NAME).exe main.go
 
 release-all:
 	cp $(EXTRA_FILES) build/linux-amd64/
