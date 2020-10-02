@@ -15,9 +15,17 @@
 
 ## Requires
 
+All systems require you are connected to the Swinburne VPN. For Linux and Windows I recommend OpenConnect ([see here](https://openconnect.github.io/openconnect-gui/) for the Windows client).
+
+### Linux/macOS
+
 On Linux and macOS systems `sshpass` is required to be installed.
 
+### Windows
+
 On Windows systems `putty` is required to be installed.
+
+I recommend the official [Windows Terminal](https://github.com/microsoft/terminal) over the pre-installed Command Prompt.
 
 ## Usage
 
