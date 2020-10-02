@@ -21,7 +21,7 @@ On Windows systems `putty` is required to be installed.
 
 ## Usage
 
-Start by simply extracting and running the single binary in the [latest release](https://github.com/losuler/smart-rack-cli/releases/latest) for your system. For each router or switch you would like to connect to, start a seperate process (e.g. in another terminal window). 
+Run by extracting and executing the binary named `srs` from the [latest release](https://github.com/losuler/smart-rack-cli/releases/latest) archive for your system. For each router or switch you would like to connect to, start a seperate process.
 
 **Note:** Answering `y` to the prompt to shutdown and release will effect ALL routers and switches booked.
 
