@@ -15,9 +15,9 @@
 
 ## Requires
 
-In order to connect Smart Rack you are required to be connected to the Swinburne VPN. For all operating systems I recommend OpenConnect.
+In order to connect Smart Rack you are required to be connected to the Swinburne VPN. For all operating systems I recommend OpenConnect (an open source client for Cisco's AnyConnect SSL VPN).
 
-There's a [Windows client](https://openconnect.github.io/openconnect-gui/), [a package](https://formulae.brew.sh/formula/openconnect) in Homebrew for macOS and is packaged in most distros (as a CLI tool and in NetworkManager/GNOME upstream).
+There's a [Windows client](https://openconnect.github.io/openconnect-gui/), [a package] in MacPorts and in [Homebrew](https://formulae.brew.sh/formula/openconnect) for macOS and is packaged in [most](https://repology.org/project/openconnect/versions) distros.
 
 ### Linux/macOS
 
