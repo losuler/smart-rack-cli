@@ -15,21 +15,35 @@
 
 ## Requires
 
-In order to connect Smart Rack you are required to be connected to the Swinburne VPN. For all operating systems I recommend OpenConnect (an open source client for Cisco's AnyConnect SSL VPN).
+In order to connect Smart Rack you are required to be connected to the Swinburne VPN. For all operating systems it's recommended to use OpenConnect (an open source client for Cisco's AnyConnect SSL VPN).
 
-There's a [Windows client](https://openconnect.github.io/openconnect-gui/), [a package] in MacPorts and in [Homebrew](https://formulae.brew.sh/formula/openconnect) for macOS and is packaged in [most](https://repology.org/project/openconnect/versions) distros.
+It is packaged in [most](https://repology.org/project/openconnect/versions) Linux distros (as a CLI tool and in NetworkManager upstream), as [a package](https://ports.macports.org/port/openconnect/summary) in MacPorts and [Homebrew](https://formulae.brew.sh/formula/openconnect) for macOS and as a [client](https://openconnect.github.io/openconnect-gui/) on Windows.
 
-### Linux/macOS
+### Linux
 
-On Linux and macOS `sshpass` is required to be installed.
+```
+sshpass
+```
 
-If using Homebrew on macOS, `sshpass` [is not](https://github.com/Homebrew/brew/commit/04dfdd972c7fca25e86e9e2ff7767b9f5b789f20) in the official repo. However a Homebrew [Tap](https://docs.brew.sh/Taps) exists, the source of which is [here](https://github.com/hudochenkov/homebrew-sshpass/blob/master/sshpass.rb). This can be installed by running `brew install hudochenkov/sshpass/sshpass`.
+`sshpass` has been packaged on [most](https://repology.org/project/sshpass/versions) Linux distros.
+
+### macOS
+
+```
+sshpass
+```
+
+On MacPorts, `sshpass` has been [packaged](https://ports.macports.org/port/sshpass/summary) in the offical repo.
+
+On Homebrew `sshpass` [is not](https://github.com/Homebrew/brew/commit/04dfdd972c7fca25e86e9e2ff7767b9f5b789f20) in the official repo. However a Homebrew [Tap](https://docs.brew.sh/Taps) exists, the source of which is [here](https://github.com/hudochenkov/homebrew-sshpass/blob/master/sshpass.rb). This can be installed by running `brew install hudochenkov/sshpass/sshpass`.
 
 ### Windows
 
-On Windows `putty` is required to be installed.
+```
+putty
+```
 
-I recommend the official [Windows Terminal](https://github.com/microsoft/terminal) over the pre-installed Command Prompt.
+It's also recommended to use the official [Windows Terminal](https://github.com/microsoft/terminal) over the pre-installed Command Prompt.
 
 ## Usage
 
