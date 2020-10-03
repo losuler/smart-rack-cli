@@ -23,6 +23,8 @@ There's a [Windows client](https://openconnect.github.io/openconnect-gui/), [a p
 
 On Linux and macOS `sshpass` is required to be installed.
 
+If using Homebrew on macOS, `sshpass` [is not](https://github.com/Homebrew/brew/commit/04dfdd972c7fca25e86e9e2ff7767b9f5b789f20) in the official repo. However a Homebrew [Tap](https://docs.brew.sh/Taps) exists, the source of which is [here](https://github.com/hudochenkov/homebrew-sshpass/blob/master/sshpass.rb). This can be installed by running `brew install hudochenkov/sshpass/sshpass`.
+
 ### Windows
 
 On Windows `putty` is required to be installed.
